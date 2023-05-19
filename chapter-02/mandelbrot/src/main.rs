@@ -46,22 +46,34 @@ fn calculate_mandelbrot(
 }
 
 fn render_mandelbrot(escape_vals: Vec<Vec<usize>>) {
+
+    fn color(int: i32) -> String {
+        format!("\x1b[0;{}m\u{2588}\x1b[0m", int)
+    }
+
+    let red = color(31);
+    let yellow = color(33);
+    let green = color(32);
+    let cyan = color(36);
+    let blue = color(34);
+    let magenta = color(35);
+
     for row in escape_vals {
         let mut line = String::with_capacity(row.len());
         for column in row {
             let val = match column {
-                0..=2 => ' ',
-                3..=5 => '.',
-                6..=10 => '•',
-                11..=30 => '*',
-                31..=100 => '+',
-                101..=200 => 'x',
-                201..=400 => '$',
-                401..=700 => '#',
-                _ => '%',
+                0..=2 => " ",
+                3..=5 => ".",
+                6..=10 => "•",
+                11..=30 => magenta.as_str(),
+                31..=100 => blue.as_str(),
+                101..=200 => cyan.as_str(),
+                201..=300 => green.as_str(),
+                301..=999 => yellow.as_str(),
+                _ => red.as_str(),
             };
 
-            line.push(val);
+            line.push_str(val);
         }
 
         println!("{line}");
@@ -69,7 +81,7 @@ fn render_mandelbrot(escape_vals: Vec<Vec<usize>>) {
 }
 
 fn main() {
-    let mandelbrot = calculate_mandelbrot(1000, -2.0, 1.0, -1.0, 1.0, 100, 24);
+    let mandelbrot = calculate_mandelbrot(1000, -2.0, 1.0, -1.0, 1.0, 200, 48);
 
     render_mandelbrot(mandelbrot);
 }
