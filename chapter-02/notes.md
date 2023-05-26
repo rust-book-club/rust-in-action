@@ -157,3 +157,45 @@ This section talks about lifetime elision but doesn't explain how it works, like
 
 > "During the compilation process, `a + b` is converted to `a.add(b)`." Just like in Scala :')
 
+## 2.9 Creating grep-lite
+
+> "Strings are complicated for newcomers to Rust." Yup.
+
+Lots of detail about `&str` strings vs. `String` strings vs. etc. here
+
+- "`String` is an _owned_ type" / "`&str` is a _borrowed_ type"
+- "`&str` can be thought of as read-only data, whereas `String` is read-write"
+- `&str`s are UTF-8 while `char`s are UTF-32
+
+## 2.10 Making lists of things with arrays, slices, and vectors
+
+> "Arrays are fixed-width and extremely lightweight. Vectors are growable but incur a small runtime penalty because of the extra bookkeeping that these do."
+
+_repeat expressions_ -- `[2; 5]` is equivalent to `[2, 2, 2, 2, 2]`
+
+> "_`[u8; 3]` is a different type than `[u8; 4]`_. The size of the array matters to the type system."
+
+_Arrays_ and _slices_ are different things. An array `[u8; 4]` is different from a slice `&[u8]`. Slices have two `usize` components: a pointer and a length.
+
+`ref` keyword binds by reference during pattern matching
+
+Try to give a good size estimate by using `Vec::with_capacity()` so Rust doesn't need to resize the vector
+
+Don't assume files are UTF-8 encoded. Read the file in as a `[u8]` and decode based on your expected encoding.
+
+## 2.11 Including third-party code
+
+`cargo doc` to generate HTML docs for all your dependencies
+
+`cargo doc --open` to open those docs in a browser
+
+`rustup doc` opens Rust's standard library docs in a browser
+
+## 2.12 Supporting command-line arguments
+
+`clap` is a crate for handling command-line arguments (`c`ommand `l`ine `a`rgument `p`arser)
+
+## 2.14 Reading from stdin
+
+Bit annoying how the book adds a feature to this project and then completely ignores it and rewrites the project from scratch every section
+
