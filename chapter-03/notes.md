@@ -22,3 +22,6 @@ A: "When attributes apply to a whole crate, their syntax is `#![crate_attribute]
 
 `()` is the "Unit" type, `!` is the "Never" type.
 
+## 3.2 Modeling files with struct
+
+"Newtype" is the term for a type like `struct Hostname(String)`, where a type just wraps another type
