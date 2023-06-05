@@ -1,5 +1,6 @@
 #![allow(unused_variables)]
 
+use std::fmt::{Display, Formatter, write};
 use rand::{Rng, thread_rng};
 
 fn one_in(denominator: u32) -> bool {
@@ -12,11 +13,33 @@ enum FileState {
     Closed,
 }
 
+impl Display for FileState {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FileState::Open => write!(f, "OPEN"),
+            FileState::Closed => write!(f, "CLOSED"),
+        }
+    }
+}
+
 #[derive(Debug)]
 struct File {
     name: String,
     data: Vec<u8>,
     state: FileState,
+}
+
+impl Display for File {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "<{} ({})>", self.name, self.state)
+    }
+}
+
+trait Read {
+    fn read(
+        &self,
+        save_to: &mut Vec<u8>,
+    ) -> Result<usize, String>;
 }
 
 impl File {
@@ -36,11 +59,10 @@ impl File {
         f.data = data.clone();
         f
     }
+}
 
-    fn read(
-        &self,
-        save_to: &mut Vec<u8>,
-    ) -> Result<usize, String> {
+impl Read for File {
+    fn read(&self, save_to: &mut Vec<u8>) -> Result<usize, String> {
         if self.state != FileState::Open {
             Err(String::from("File must be open for reading"))
         } else {
@@ -51,7 +73,6 @@ impl File {
             Ok(read_length)
         }
     }
-
 }
 
 fn open(mut f: File) -> Result<File, String> {
@@ -89,6 +110,7 @@ fn main() {
     let text = String::from_utf8_lossy(&buffer);
 
     println!("{:?}", file);
+    println!("{}", file);
     println!("{} is {} bytes long", &file.name, file_length);
     println!("{}", text);
 }
