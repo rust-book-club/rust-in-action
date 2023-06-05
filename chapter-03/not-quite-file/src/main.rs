@@ -1,6 +1,8 @@
+//! Simulating files one step at a time.
+
 #![allow(unused_variables)]
 
-use std::fmt::{Display, Formatter, write};
+use std::fmt::{Display, Formatter};
 use rand::{Rng, thread_rng};
 
 fn one_in(denominator: u32) -> bool {
@@ -8,7 +10,7 @@ fn one_in(denominator: u32) -> bool {
 }
 
 #[derive(Debug,PartialEq)]
-enum FileState {
+pub enum FileState {
     Open,
     Closed,
 }
@@ -22,8 +24,10 @@ impl Display for FileState {
     }
 }
 
+/// Represents a "file",
+/// which probably lives on a file system.
 #[derive(Debug)]
-struct File {
+pub struct File {
     name: String,
     data: Vec<u8>,
     state: FileState,
@@ -43,7 +47,8 @@ trait Read {
 }
 
 impl File {
-    fn new(name: &str) -> File {
+    /// New files are assumed to be empty, but a name is required.
+    pub fn new(name: &str) -> File {
         File {
             name: String::from(name),
             data: Vec::new(),
@@ -51,7 +56,17 @@ impl File {
         }
     }
 
-    fn new_with_data(
+    /// Returns the file's length in bytes.
+    pub fn len(&self) -> usize {
+        self.data.len()
+    }
+
+    /// Returns the file's name.
+    pub fn name(&self) -> String {
+        self.name.clone()
+    }
+
+    pub fn new_with_data(
         name: &str,
         data: &Vec<u8>
     ) -> File {
